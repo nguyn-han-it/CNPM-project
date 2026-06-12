@@ -1,9 +1,69 @@
 <?php
 session_start();
 $da_dang_nhap = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
-$ten_nguoi_dung = $_SESSION['TenNguoiDung'] ?? '';
+$ten_nguoi_dung = $_SESSION['ho_ten'] ?? '';
+
+if(isset($_POST['gui_danh_gia'])){
+
+    $ma_yeu_cau = $_POST['ma_yeu_cau'];
+    $so_sao = $_POST['so_sao'];
+    $nhan_xet = trim($_POST['nhan_xet']);
+
+    try{
+
+        $sql = "
+        INSERT INTO BangDanhGia
+        (
+            SoSao,
+            NhanXet,
+            MaYeuCau,
+            MaNguoiDung
+        )
+        VALUES
+        (
+            ?, ?, ?, ?
+        )
+        ";
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute([
+            $so_sao,
+            $nhan_xet,
+            $ma_yeu_cau,
+            $ma_khach_hang
+        ]);
+
+        echo "
+        <script>
+            alert('Đánh giá thành công');
+            location.href='';
+        </script>
+        ";
+
+    }catch(Exception $e){
+
+        echo $e->getMessage();
+
+    }
+
+}
 
 require_once 'db.php';
+
+$ma_khach_hang = $_SESSION['user_id'] ?? 0;
+
+$sql_yeu_cau = "
+SELECT *
+FROM BangYeuCau
+WHERE MaKhachHang = ?
+ORDER BY NgayTao DESC
+";
+
+$stmt_yc = $pdo->prepare($sql_yeu_cau);
+$stmt_yc->execute([$ma_khach_hang]);
+
+$danh_sach_yeu_cau = $stmt_yc->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -485,8 +545,7 @@ require_once 'db.php';
     <?php if ($da_dang_nhap): ?>
       <div class="dropdown">
         <button class="user-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          <div class="user-avatar"><?= mb_strtoupper(mb_substr($ten_nguoi_dung, 0, 2)) ?></div>
-          <?= htmlspecialchars($ten_nguoi_dung) ?>
+          <span>Chào,<strong><?= htmlspecialchars($ten_nguoi_dung) ?></strong></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="lichsu.php">Lịch sử yêu cầu</a></li>
@@ -768,37 +827,13 @@ require_once 'db.php';
     </a>
         </p>
     </div>
-    </div>
-    
-<!-- Đánh giá -->
-<div class="support-card">
-      <div class="support-card-head">
-        <h3>Đánh giá</h3>
-      </div>
-  <div class="support-card-body">
-    <form action="xulydanhgia.php" method="POST">
-
-      <input type="text" name="ten" class="form-control mb-2" placeholder="Tên của bạn" required>
-
-      <select name="sao" class="form-select mb-2">
-        <option value="5">5⭐ - Rất tốt</option>
-        <option value="4">4⭐ - Tốt</option>
-        <option value="3">3⭐ - Bình thường</option>
-        <option value="2">2⭐ - Kém</option>
-        <option value="1">1⭐ - Rất kém</option>
-      </select>
-
-      <textarea name="noidung" class="form-control mb-2" rows="3" placeholder="Nhập đánh giá..." required></textarea>
-
-      <button class="btn-support-primary">Gửi đánh giá</button>
-    </form>
   </div>
-</div>
-</div>
+  
 
  </aside>
 
 </div>
+
 
 
 <!-- ===== FOOTER ===== -->

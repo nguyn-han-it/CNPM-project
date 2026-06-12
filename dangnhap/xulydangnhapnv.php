@@ -19,13 +19,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role_id']   = $user['MaVaiTro'];
 
             switch ($user['MaVaiTro']) {
-                case 1: // Admin
+                case 1: 
                     header("Location: ../nhanvien/admin.php");
                     break;
-                case 2: // Bác sĩ
-                    header("Location: ../nhanien/bacsi.php");
+                case 2: 
+                    header("Location: ../nhanvien/bacsi.php");
                     break;
-                case 3: // Nhân viên
+                case 3: 
                     header("Location: ../nhanvien/nhanvien.php");
                     break;
                 default:

@@ -1,0 +1,45 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+}
+
+.service-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.service-title {
+  text-align: center;
+  color: #0d6efd;
+  margin-bottom: 20px;
+}
+
+.service-img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.service-section {
+  margin-bottom: 20px;
+}
+
+.service-section h4 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.service-section ul {
+  padding-left: 20px;
+}
+
+.btn-back {
+  display: inline-block;
+  margin-top: 20px;
+}
